@@ -1,17 +1,16 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <iostream>
-#include <graphics.h>
 #include <vector>
-#include <fstream>
 #include <Windows.h>
 #include <mmsystem.h>
 #pragma comment(lib,"WINMM.LIB")
 
 #include "allClass.h"
+#include "loadResources.h"
 //#include "data.h"
 using namespace std;
 
-
+#define SPEED 3
 
 void CenterText(int x, int y, int w, int h, const wchar_t* text);
 //CenterText

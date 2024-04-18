@@ -1,2 +1,4 @@
-﻿  Functions.cpp
-  homework.vcxproj -> D:\program_C\homework\x64\Debug\homework.exe
+﻿  loadResources.cpp
+  源.cpp
+D:\program_C\homework\homework\源.cpp(46,23): error C2065: “buttons”: 未声明的标识符
+  正在生成代码...

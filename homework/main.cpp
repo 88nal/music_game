@@ -11,36 +11,20 @@ bool PutBeginWindow(IMAGE buttons[]);
 
 ExMessage msg = { 0 };
 
-wchar_t all_music[3][50] =
-{
-	L"Eutopia",
-	L"InterstellarJourney",
-	L"MistyMemory"
-};
-
-wchar_t pass_music[3][100] =
-{
-	L"open music\\Eutopia.mp3 alias bkmusic",
-	L"open music\\InterstellarJourney.mp3 alias bkmusic",
-	L"open music\\MistyMemory.mp3 alias bkmusic"
-};
-
 int windows = 0;	
 int windows_music = 0;	
 int music_index = -1;
 
+bool testmode = false;
+
 int main()
 {
+	load_game_resources();
+
 	initgraph(1200, 800, EX_DBLCLKS);
 	setbkcolor(BLACK);
 	cleardevice();
 
-	IMAGE buttons[4];
-
-	loadimage(&buttons[0], L"buttons\\BEGIN.png", 400, 150);
-	loadimage(&buttons[1], L"buttons\\BEGIN_t.png", 400, 150);
-	loadimage(&buttons[2], L"buttons\\QUIT.png", 400, 150);
-	loadimage(&buttons[3], L"buttons\\QUIT_t.png", 400, 150);
 	
 	const clock_t FPS = 1000 / 80;
 	int FPS_starttime = 0;
@@ -71,34 +55,34 @@ int main()
 			
 		}
 
-		playMusic(pass_music, music_index);
+		
+		vector<BlueKeys> vec_BK;				
+		readDataFile(music_index, vec_BK);			//读取对应音乐的键块文件
+		playMusic(pass_music, music_index);			//播放对应音乐
 
-		if (windows_music == 1)
+		if (windows_music == 1 && testmode == false)
 		{
-			vector<BlueKeys> vec_BK;
-			readDataFile(music_index, vec_BK);
-
 			while (1)
 			{
 				cleardevice();
 
-				FPS_starttime = clock();
+				FPS_starttime = clock();			//帧率开始计算的时间
 
-				int HKS = clock();
+				int HKS = clock();					//音乐开始播放的初始时间
 
 				if (time_delay_bool)
 				{
 					time_delay = FPS_starttime;
-					time_delay_bool = false;
+					time_delay_bool = false;		//time_delay_bool仅赋值一次
 				}
 
-				HKS -= time_delay;
+				HKS -= time_delay;					//使音乐开始使的计时为0，即记录的时间与音乐播放的时间相同
 
 				for (int i = 0; i < vec_BK.size(); i++)
 				{
 					if (vec_BK[i].value_put == true)
 					{
-						vec_BK[i].mx -= 3;
+						vec_BK[i].mx -= SPEED;			//移动速度
 					}
 				}
 
@@ -112,13 +96,11 @@ int main()
 				BeginBatchDraw();
 				cleardevice();
 
-				line(200, 0, 200, 800);
-
-				
+				line(200, 0, 200, 800);				//判定线
 
 				for (int i = 0; i < vec_BK.size(); i++)
 				{
-					if (vec_BK[i].mtime - HKS <= 10 && vec_BK[i].value_put == false)
+					if (vec_BK[i].mtime - HKS <= 10 && vec_BK[i].value_put == false)	//键本身的mtime与HKS对比，小于10ms，value_put由false变为true，即允许绘制
 					{
 						vec_BK[i].value_put = true;
 						cout << HKS << endl;
@@ -134,31 +116,6 @@ int main()
 							{
 							case 0x44:	//D
 								hitDetermine(vec_BK[i], &type_text_up, &num_text_up, msg);
-								/*if (vec_BK[i].mx >= 190 && vec_BK[i].mx <= 210)
-								{
-									type_text_up = 3;
-									vec_BK[i].value_hit = true;
-									msg.message = 0;
-								}
-								else if ((vec_BK[i].mx > 180 && vec_BK[i].mx <= 190) || (vec_BK[i].mx > 210 && vec_BK[i].mx <= 220))
-								{
-									type_text_up = 2;
-									vec_BK[i].value_hit = true;
-									msg.message = 0;
-								}
-								else if ((vec_BK[i].mx > 160 && vec_BK[i].mx <= 180) || (vec_BK[i].mx > 230 && vec_BK[i].mx <= 250))
-								{
-									type_text_up = 1;
-									vec_BK[i].value_hit = true;
-									msg.message = 0;
-								}
-								else
-								{
-									type_text_up = 0;
-									vec_BK[i].value_hit = true;
-									msg.message = 0;
-								}*/
-								break;
 							case 0x46:	//F
 								hitDetermine(vec_BK[i], &type_text_up, &num_text_up, msg);
 								break;
@@ -173,30 +130,6 @@ int main()
 								break;
 							case 0x4B:	//K
 								hitDetermine(vec_BK[i], &type_text_down, &num_text_down, msg);
-								/*if (vec_BK[i].mx >= 190 && vec_BK[i].mx <= 210)
-								{
-									type_text_down = 3;
-									vec_BK[i].value_hit = true;
-									msg.message = 0;
-								}
-								else if ((vec_BK[i].mx > 180 && vec_BK[i].mx <= 190) || (vec_BK[i].mx > 210 && vec_BK[i].mx <= 220))
-								{
-									type_text_down = 2;
-									vec_BK[i].value_hit = true;
-									msg.message = 0;
-								}
-								else if ((vec_BK[i].mx > 160 && vec_BK[i].mx <= 180) || (vec_BK[i].mx > 230 && vec_BK[i].mx <= 250))
-								{
-									type_text_down = 1;
-									vec_BK[i].value_hit = true;
-									msg.message = 0;
-								}
-								else
-								{
-									type_text_down = 0;
-									vec_BK[i].value_hit = true;
-									msg.message = 0;
-								}*/
 								break;
 							}
 						}
@@ -216,15 +149,18 @@ int main()
 
 				msg.message = 0;
 
-				FPS_endtime = clock();
+				FPS_endtime = clock();			//帧率结束计算的时间
 
-				if (FPS_endtime - FPS_starttime < FPS)
+				if (FPS_endtime - FPS_starttime < FPS)		
 				{
-					Sleep(FPS - FPS_endtime + FPS_starttime);
+					Sleep(FPS - FPS_endtime + FPS_starttime);	//保持每次循环60ms
 				}
 			}
 		}
+		else if (testmode == true)
+		{
 
+		}
 		
 	}
 	
@@ -241,6 +177,21 @@ bool PutBeginWindow(IMAGE buttons[])
 
 	}
 
+	if (testmode == false)
+	{
+		if (putButton(1000, 600, 100, 30, L"TestMode OFF", msg.x, msg.y, msg.message, 55, 55, 55))
+		{
+			testmode = true;
+		}
+	}
+	else if (testmode == true)
+	{
+		if (putButton(1000, 600, 100, 30, L"TestMode ON", msg.x, msg.y, msg.message, 55, 55, 55))
+		{
+			testmode = false;
+		}
+	}
+
 	if (put_image_Button(300, 100, buttons[0].getwidth(), buttons[0].getheight(), buttons, msg.x, msg.y, msg.message, 0))
 	{
 		cleardevice();
@@ -254,6 +205,8 @@ bool PutBeginWindow(IMAGE buttons[])
 	}
 
 	EndBatchDraw();
+
+	msg.message = 0;
 
 	return false;
 }
