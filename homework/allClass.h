@@ -17,7 +17,8 @@ public:
 	int mx;
 	int my;
 	int mtime;
-	bool value = false;
+	bool value_put = false;
+	bool value_hit = false;
 	int h = 100;
 	int w = 15;
 
