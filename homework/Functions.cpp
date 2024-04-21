@@ -69,6 +69,36 @@ bool put_image_Button(int x, int y, int w, int h, IMAGE buttons[], int mx, int m
 	return false;
 }
 
+bool put_image_Button(int x, int y, int w, int h, IMAGE buttons[], int mx, int my, int msg_message, int index, int des)
+{
+	int ox = 0;
+	int oy = 0;
+	
+	if (des == 0)
+	{
+		ox = abs(mx - x - buttons[index].getwidth() / 2);
+		oy = abs(my - y - buttons[index].getheight() / 2 + 10);
+
+		if (ox + oy < (buttons[index].getwidth() / 2 - 80))
+		{
+			putimage(x, y, &buttons[index + 1]);		
+		}
+		else
+		{
+			putimage(x, y, &buttons[index]);
+		}
+
+		if (msg_message == WM_LBUTTONDOWN && inArea(mx, my, x, y, w, h))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+
+}
+
 void playMusic(wchar_t pass_music[3][100], int music_index)
 {
 	cout << music_index << endl;
@@ -107,133 +137,92 @@ void hitDetermine(BlueKeys& vec_BK, int* type_text, int* num_text, ExMessage& ms
 	}*/
 }
 
-void levelTextPut(int* type_text_up, int* type_text_down, int* num_text_up, int* num_text_down)
+void levelTextPut(int* type_text, int* num_text,int temp)
 {
-	switch (*type_text_up)
+	int y = 0;
+
+	if (temp == 0) { y = 175; }
+	if (temp == 1) { y = 375; }
+
+	switch (*type_text)
 	{
 	case -1:
-		outtextxy(225, 175, L"    ");
+		outtextxy(225, y, L"    ");
 
-		*num_text_up = 0;
+		*num_text = 0;
 
 		break;
 	case 0:
-		outtextxy(225, 175, L"Miss");
+		outtextxy(225, y, L"Miss");
 
-		if (*num_text_up == 30)
+		if (*num_text == 30)
 		{
 			cout << "miss ++" << endl;
-			*num_text_up = 0;
-			*type_text_up = -1;
+			*num_text = 0;
+			*type_text = -1;
 		}
 		else
 		{
-			(*num_text_up)++;
-			cout << *num_text_up << endl;
+			(*num_text)++;
+			cout << *num_text << endl;
 		}
 		break;
 	case 1:
-		outtextxy(225, 175, L"Bad");
+		outtextxy(225, y, L"Bad");
 
-		if (*num_text_up == 30)
+		if (*num_text == 30)
 		{
 			cout << "Bad ++" << endl;
-			*num_text_up = 0;
-			*type_text_up = -1;
+			*num_text = 0;
+			*type_text = -1;
 		}
 		else
 		{
-			(*num_text_up)++;
-			cout << *num_text_up << endl;
+			(*num_text)++;
+			cout << *num_text << endl;
 		}
 		break;
 	case 2:
-		outtextxy(225, 175, L"Good");
+		outtextxy(225, y, L"Good");
 
-		if (*num_text_up == 30)
+		if (*num_text == 30)
 		{
 			cout << "Good ++" << endl;
-			(*num_text_up)++;
-			*type_text_up = -1;
+			(*num_text)++;
+			*type_text = -1;
 		}
 		else
 		{
-			(*num_text_up)++;
-			cout << *num_text_up << endl;
+			(*num_text)++;
+			cout << *num_text << endl;
 		}
 		break;
 	case 3:
-		outtextxy(225, 175, L"Perfect");
+		outtextxy(225, y, L"Perfect");
 
-		if (*num_text_up == 30)
+		if (*num_text == 30)
 		{
 			cout << "Perfect ++" << endl;
-			*num_text_up = 0;
-			*type_text_up = -1;
+			*num_text = 0;
+			*type_text = -1;
 		}
 		else
 		{
-			(*num_text_up)++;
-			cout << *num_text_up << endl;
-		}
-		break;
-	}
-
-	switch (*type_text_down)
-	{
-	case -1:
-		outtextxy(225, 375, L"    ");
-
-		*num_text_down = 0;
-
-		break;
-	case 0:
-		outtextxy(225, 375, L"Miss");
-		(*num_text_down)++;
-
-		if (*num_text_down == 50)
-		{
-			*num_text_down = 0;
-			*type_text_down = -1;
-		}
-		break;
-	case 1:
-		outtextxy(225, 375, L"Bad");
-		(*num_text_down)++;
-		if (*num_text_down == 50)
-		{
-			*num_text_down = 0;
-			*type_text_down = -1;
-		}
-		break;
-	case 2:
-		outtextxy(225, 375, L"Good");
-		(*num_text_down)++;
-		if (*num_text_down == 50)
-		{
-			*num_text_down = 0;
-			*type_text_down = -1;
-		}
-		break;
-	case 3:
-		outtextxy(225, 375, L"Perfect");
-		(*num_text_down)++;
-		if (*num_text_down == 50)
-		{
-			*num_text_down = 0;
-			*type_text_down = -1;
+			(*num_text)++;
+			cout << *num_text << endl;
 		}
 		break;
 	}
 }
 
-void readDataFile(int music_index, vector<BlueKeys>& vec_BK)
+void readDataFile(int music_index, vector<BlueKeys>& vec_BK, char pass_musicData[][100])
 {
 	ifstream fin;
 
 	BlueKeys bk_temp;
 
-	fin.open("data\\test.txt");
+	fin.open(pass_musicData[music_index]);
+	cout << pass_musicData[music_index] << endl;
 
 	while (fin >> bk_temp.mx)
 	{

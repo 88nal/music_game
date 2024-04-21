@@ -11,3 +11,8 @@ void BlueKeys::show()
 	setlinecolor(WHITE);
 	fillrectangle(mx - w, my, mx, my + h);
 }
+
+// void Sence::open()
+//{
+//	cout << 2 << endl;
+//}

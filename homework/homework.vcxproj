@@ -131,7 +131,7 @@
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="loadResources.cpp" />
-    <ClCompile Include="源.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allClass.h" />

@@ -5,11 +5,74 @@
 #include <conio.h>
 #include "Functions.h"
 
+
 void PutChoiseWindow(wchar_t all_music[4][50]);
 
 bool PutBeginWindow(IMAGE buttons[]);
 
+void load_game_resources();
+
+void img_FadeAway(IMAGE m_img)
+{
+	while (1)
+	{
+		DWORD* buffer = GetImageBuffer(&m_img);
+		BYTE r;
+		BYTE g;
+		BYTE b;
+		int width = m_img.getwidth();
+		int height = m_img.getheight();
+		double RATIO = 0.99;
+		int t = clock();
+		while (1)
+		{
+			int t_ = clock();
+
+			for (int i = 0; i < width * height; i++)
+			{
+				DWORD pixel = buffer[i];
+
+				r = (BYTE)(GetBValue(pixel) * RATIO + GetBValue(BLACK) * (1 - RATIO));
+				g = (BYTE)(GetGValue(pixel) * RATIO + GetGValue(BLACK) * (1 - RATIO));
+				b = (BYTE)(GetRValue(pixel) * RATIO + GetRValue(BLACK) * (1 - RATIO));
+
+				buffer[i] = BGR(RGB(r, g, b));
+
+			}
+
+			putimage(0, 0, &m_img);
+			FlushBatchDraw();
+
+			if (t_ - t >= 2500) { return; }
+		}
+	}
+}
+
 ExMessage msg = { 0 };
+
+IMAGE buttons_BeginWindow[4];
+IMAGE img_welcome;
+
+wchar_t all_music[3][50] =
+{
+	L"Eutopia",
+	L"InterstellarJourney",
+	L"MistyMemory"
+};
+
+wchar_t pass_music[3][100] =
+{
+	L"open music\\Eutopia.mp3 alias bkmusic",
+	L"open music\\InterstellarJourney.mp3 alias bkmusic",
+	L"open music\\MistyMemory.mp3 alias bkmusic"
+};
+
+char pass_musicData[3][100] =
+{
+	"data\\data_Eutopia.txt",
+	"data\\data_InterstellarJourney.txt",
+	"data\\data_MistyMemory.txt"
+};
 
 int windows = 0;	
 int windows_music = 0;	
@@ -17,11 +80,13 @@ int music_index = -1;
 
 bool testmode = false;
 
+DWORD* pBuffer;
+
 int main()
 {
 	load_game_resources();
 
-	initgraph(1200, 800, EX_DBLCLKS);
+	initgraph(WINDOWS_WIDE, WINDOWS_HEIGHT, EX_DBLCLKS);
 	setbkcolor(BLACK);
 	cleardevice();
 
@@ -40,10 +105,11 @@ int main()
 	
 	while (1)
 	{
-		
+		img_FadeAway(img_welcome);
+
 		while (windows == 0)
 		{
-			if (PutBeginWindow(buttons))
+			if (PutBeginWindow(buttons_BeginWindow))
 			{
 				return 0;
 			}
@@ -57,7 +123,7 @@ int main()
 
 		
 		vector<BlueKeys> vec_BK;				
-		readDataFile(music_index, vec_BK);			//读取对应音乐的键块文件
+		readDataFile(music_index, vec_BK, pass_musicData);			//读取对应音乐的谱面文件
 		playMusic(pass_music, music_index);			//播放对应音乐
 
 		if (windows_music == 1 && testmode == false)
@@ -143,7 +209,8 @@ int main()
 
 				setbkmode(TRANSPARENT);
 
-				levelTextPut(&type_text_up, &type_text_down, &num_text_up, &num_text_down);
+				levelTextPut(&type_text_up, &num_text_up, 0);
+				levelTextPut(&type_text_down, &num_text_down, 1);
 
 				EndBatchDraw();
 
@@ -192,17 +259,17 @@ bool PutBeginWindow(IMAGE buttons[])
 		}
 	}
 
-	if (put_image_Button(300, 100, buttons[0].getwidth(), buttons[0].getheight(), buttons, msg.x, msg.y, msg.message, 0))
+	if (put_image_Button(300, 200, buttons[0].getwidth(), buttons[0].getheight(), buttons, msg.x, msg.y, msg.message, 0, 0))
 	{
 		cleardevice();
 		Sleep(100);
 		windows = 1;
 	}
 
-	if (put_image_Button(300, 300, buttons[2].getwidth(), buttons[2].getheight(), buttons, msg.x, msg.y, msg.message, 2))
+	/*if (put_image_Button(300, 300, buttons[2].getwidth(), buttons[2].getheight(), buttons, msg.x, msg.y, msg.message, 2))
 	{
 		return true;
-	}
+	}*/
 
 	EndBatchDraw();
 
@@ -243,7 +310,17 @@ void PutChoiseWindow(wchar_t all_music[4][50])
 	EndBatchDraw();
 }
 
+void load_game_resources()
+{
+	loadimage(&buttons_BeginWindow[0], L"buttons\\BEGIN.png", 400, 400);
+	loadimage(&buttons_BeginWindow[1], L"buttons\\BEGIN_t.png", 400, 400);
+	loadimage(&buttons_BeginWindow[2], L"buttons\\QUIT.png", 400, 150);
+	loadimage(&buttons_BeginWindow[3], L"buttons\\QUIT_t.png", 400, 150);
 
+	loadimage(&img_welcome, L"img\\img_welcome.jpg", 1200, 800);
+
+	return;
+}
 
 
 

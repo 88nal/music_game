@@ -24,3 +24,9 @@ public:
 
 	void show();
 };
+
+//class Sence
+//{
+//public:
+//	virtual void open();
+//};

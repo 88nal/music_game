@@ -4,4 +4,4 @@
 
 
 
-void load_game_resources();
+
