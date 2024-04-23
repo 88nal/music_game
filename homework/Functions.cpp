@@ -2,7 +2,7 @@
 #include "Functions.h"
 using namespace std;
 
-void CenterText(int x, int y, int w, int h, const wchar_t* text)
+void CenterText(int x, int y, int w, int h, const char* text)
 {
 	setcolor(YELLOW);
 	setbkmode(TRANSPARENT);
@@ -25,7 +25,7 @@ bool inArea(int mx, int my, int x, int y, int w, int h)
 	return false;
 }
 
-bool putButton(int x, int y, int w, int h, const wchar_t* text, int mx, int my, int msg_message, int r, int g, int b)
+bool putButton(int x, int y, int w, int h, const char* text, int mx, int my, int msg_message, int r, int g, int b)
 {
 	if (mx > x && mx < x + w && my > y && my < y + h)
 	{
@@ -99,11 +99,11 @@ bool put_image_Button(int x, int y, int w, int h, IMAGE buttons[], int mx, int m
 
 }
 
-void playMusic(wchar_t pass_music[3][100], int music_index)
+void playMusic(char pass_music[][100], int music_index)
 {
 	cout << music_index << endl;
 	mciSendString(pass_music[music_index], NULL, 0, NULL);
-	mciSendString(L"play bkmusic repeat", NULL, 0, NULL);
+	mciSendString("play bkmusic repeat", NULL, 0, NULL);
 }
 
 void hitDetermine(BlueKeys& vec_BK, int* type_text, int* num_text, ExMessage& msg)
@@ -129,12 +129,6 @@ void hitDetermine(BlueKeys& vec_BK, int* type_text, int* num_text, ExMessage& ms
 		vec_BK.value_hit = true;
 		msg.message = 0;
 	}
-	/*else
-	{
-		*type_text_up = 0;
-		vec_BK.value_hit = true;
-		msg.message = 0;
-	}*/
 }
 
 void levelTextPut(int* type_text, int* num_text,int temp)
@@ -147,69 +141,61 @@ void levelTextPut(int* type_text, int* num_text,int temp)
 	switch (*type_text)
 	{
 	case -1:
-		outtextxy(225, y, L"    ");
+		outtextxy(225, y, "    ");
 
 		*num_text = 0;
 
 		break;
 	case 0:
-		outtextxy(225, y, L"Miss");
+		outtextxy(225, y, "Miss");
 
 		if (*num_text == 30)
 		{
-			cout << "miss ++" << endl;
 			*num_text = 0;
 			*type_text = -1;
 		}
 		else
 		{
 			(*num_text)++;
-			cout << *num_text << endl;
 		}
 		break;
 	case 1:
-		outtextxy(225, y, L"Bad");
+		outtextxy(225, y, "Bad");
 
 		if (*num_text == 30)
 		{
-			cout << "Bad ++" << endl;
 			*num_text = 0;
 			*type_text = -1;
 		}
 		else
 		{
 			(*num_text)++;
-			cout << *num_text << endl;
 		}
 		break;
 	case 2:
-		outtextxy(225, y, L"Good");
+		outtextxy(225, y, "Good");
 
 		if (*num_text == 30)
 		{
-			cout << "Good ++" << endl;
 			(*num_text)++;
 			*type_text = -1;
 		}
 		else
 		{
 			(*num_text)++;
-			cout << *num_text << endl;
 		}
 		break;
 	case 3:
-		outtextxy(225, y, L"Perfect");
+		outtextxy(225, y, "Perfect");
 
 		if (*num_text == 30)
 		{
-			cout << "Perfect ++" << endl;
 			*num_text = 0;
 			*type_text = -1;
 		}
 		else
 		{
 			(*num_text)++;
-			cout << *num_text << endl;
 		}
 		break;
 	}

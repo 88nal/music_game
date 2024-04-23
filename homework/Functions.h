@@ -14,7 +14,7 @@ using namespace std;
 #define WINDOWS_WIDE	1200
 #define WINDOWS_HEIGHT	800
 
-void CenterText(int x, int y, int w, int h, const wchar_t* text);
+void CenterText(int x, int y, int w, int h, const char* text);
 //CenterText
 //将文字显示在指定区域的中心
 
@@ -24,7 +24,7 @@ bool inArea(int mx, int my, int x, int y, int w, int h);
 //判断坐标是否位于指定区域之内
 
 
-bool putButton(int x, int y, int w, int h, const wchar_t* text, int mx, int my, int msg_message, int r, int g, int b);
+bool putButton(int x, int y, int w, int h, const char* text, int mx, int my, int msg_message, int r, int g, int b);
 //putButton
 //新建一个按钮在（x，y），宽度为w，高度为h，按钮内文字为text，鼠标点击位置（mx，my），msg_message为msg.message，rgb为颜色值
 
@@ -37,7 +37,7 @@ bool put_image_Button(int x, int y, int w, int h, IMAGE buttons[], int mx, int m
 //新建一个按钮在（x，y），宽度为w，高度为h，按钮内图片为buttons[index]，buttons[index+1]为鼠标移到按钮上后按钮颜色变深的效果，鼠标点击位置（mx，my），msg_message为msg.message
 
 
-void playMusic(wchar_t pass_music[3][100], int music_index);
+void playMusic(char pass_music[][100], int music_index);
 //playMusic
 //播放pass_music[index]地址的音乐
 

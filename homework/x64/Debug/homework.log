@@ -1,2 +1,5 @@
-﻿  main.cpp
+﻿  Functions.cpp
+  main.cpp
+  正在生成代码...
+D:\program_C\homework\homework\Functions.cpp(100): warning C4715: “put_image_Button”: 不是所有的控件路径都返回值
   homework.vcxproj -> D:\program_C\homework\x64\Debug\homework.exe
