@@ -71,7 +71,7 @@ char pass_musicData[3][100] =
 {
 	"data\\data_Eutopia.txt",
 	"data\\data_InterstellarJourney.txt",
-	"data\\data_MistyMemory.txt"
+	"data\\data_MistyMemory_add.txt"
 };
 
 int windows = 0;	
@@ -79,8 +79,6 @@ int windows_music = 0;
 int music_index = -1;
 
 bool testmode = false;
-
-DWORD* pBuffer;
 
 int main()
 {
@@ -224,9 +222,86 @@ int main()
 				}
 			}
 		}
-		else if (testmode == true)
+		else if (windows_music == 1 && testmode == true)
 		{
+			ofstream fout;
 
+			fout.open("data\\data_MistyMemory_add.txt");
+
+			while (1)
+			{
+				cleardevice();
+
+				FPS_starttime = clock();			//帧率开始计算的时间
+
+				int HKS = clock();					//音乐开始播放的初始时间
+
+				if (time_delay_bool)
+				{
+					time_delay = FPS_starttime;
+					time_delay_bool = false;		//time_delay_bool仅赋值一次
+				}
+
+				HKS -= time_delay;					//使音乐开始使的计时为0，即记录的时间与音乐播放的时间相同
+
+				//cout << HKS << endl;
+
+				if (peekmessage(&msg, EX_MOUSE | EX_KEY))
+				{
+
+				}
+
+				BeginBatchDraw();
+				cleardevice();
+
+				line(200, 0, 200, 800);				//判定线
+
+				if (msg.message == WM_KEYDOWN)
+				{
+					switch (msg.vkcode)
+					{
+					case 0x44:	//D
+						fout << WINDOWS_WIDE << ' ' << 200 << ' ' << HKS << endl;
+						break;
+					case 0x46:	//F
+						fout << WINDOWS_WIDE << ' ' << 200 << ' ' << HKS << endl;
+						break;
+					case 0x4A:	//J
+						fout << WINDOWS_WIDE << ' ' << 400 << ' ' << HKS << endl;
+						break;
+					case 0x4B:	//K
+						fout << WINDOWS_WIDE << ' ' << 400 << ' ' << HKS << endl;
+						break;
+					}
+				}
+				//else if (msg.message == WM_KEYDOWN)
+				//{
+				//	switch (msg.vkcode)
+				//	{
+				//	case 0x4A:	//J
+				//		fout << WINDOWS_WIDE << ' ' << 400 << ' ' << HKS << endl;
+				//		break;
+				//	case 0x4B:	//K
+				//		fout << WINDOWS_WIDE << ' ' << 400 << ' ' << HKS << endl;
+				//		break;
+				//	}
+				//}
+
+				setbkmode(TRANSPARENT);
+
+				EndBatchDraw();
+
+				msg.message = 0;
+
+				FPS_endtime = clock();			//帧率结束计算的时间
+
+				if (FPS_endtime - FPS_starttime < FPS)
+				{
+					Sleep(FPS - FPS_endtime + FPS_starttime);	//保持每次循环60ms
+				}
+			}
+
+			fout.close();
 		}
 		
 	}
